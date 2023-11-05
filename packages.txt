@@ -1,0 +1,90 @@
+aerc
+alacritty
+asymptote
+bat
+btop
+cabal-install
+cmatrix
+ctags
+dialog
+discord
+dmenu
+extra-cmake-modules
+fd
+feh
+freeoffice
+fzf
+ghc
+ghc-static
+goldendict
+kcm-wacomtablet
+keynav
+libxnvctrl
+ly
+mpv
+ncdu
+neomutt
+netctl
+nodejs
+npm
+opendoas
+pandoc-cli
+pdf2svg
+picom
+playerctl
+qbittorrent
+ranger
+shellcheck
+snapd
+st
+stacer
+sxiv
+syncthing
+tagainijisho
+telegram-desktop
+texlive-basic
+texlive-bin
+texlive-binextra
+texlive-fontsextra
+texlive-fontsrecommended
+texlive-langcjk
+texlive-langcyrillic
+texlive-latexextra
+thefuck
+tldr
+toipe
+unclutter
+w3m
+write_stylus
+xclip
+xdg-ninja
+xmobar
+xmonad
+xmonad-contrib
+xsel
+yarn
+yay
+zathura
+zathura-cb
+zathura-djvu
+zathura-ps
+zoom
+cef-minimal-obs-bin 103.0.0_5060_shared_textures_2594+gc69ad37+chromium_103.0.5060.134_1-1
+freedict-tools 1:0.6.0-1
+goldendict 1:1.5.0-2
+keynav 0.20180821.0-2
+libajantv2 1:16.2_bugfix5-2
+libajantv2-debug 1:16.2_bugfix5-2
+libdatachannel 0.19.3-1
+libeb 4.4.3-10
+libjuice 1.3.3-1
+librist-git 0.2.9.r4.g0120acf-1
+qrcodegencpp-cmake 1:1.8.0-3
+qt5-webkit 5.212.0alpha4-20
+stacer 1.1.0-1
+tagainijisho 1.2.2-1
+toipe 0.4.1-1
+viber 21.0.0.1-1
+write_stylus 300.r469-1
+xdg-ninja 0.2.0.1-1
+zoom 5.16.2-1
