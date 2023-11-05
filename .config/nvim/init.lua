@@ -56,6 +56,7 @@ require('lazy').setup({
 	'archibate/lualine-time',
 	'dkarter/bullets.vim',
 	-- 'cljoly/telescope-repo.nvim',
+	'folke/zen-mode.nvim',
 
 	{
 		"AckslD/nvim-neoclip.lua",
