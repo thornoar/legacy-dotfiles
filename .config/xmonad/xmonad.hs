@@ -217,8 +217,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ [
 		((modm, xK_x), spawn ( myTerminal ++ " -e nvim" )),
 
 		-- Media
-		((modm, xK_Tab), spawn "playerctl next"), 
-		((modm .|. shiftMask, xK_Tab), spawn "playerctl previous"),
+		((modm .|. shiftMask, xK_Right), spawn "playerctl next"), 
+		((modm .|. shiftMask, xK_Left), spawn "playerctl previous"),
 		((modm, xK_space), spawn "playerctl play-pause"),
 	
 		-- Language layouts
