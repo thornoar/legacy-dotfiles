@@ -10,6 +10,7 @@ import System.Exit
     -- Actions
 import XMonad.Actions.CopyWindow (kill1)
 import XMonad.Actions.CycleWS
+-- import XMonad.Actions.Volume
 import XMonad.Actions.GridSelect
 import XMonad.Actions.MouseResize
 import XMonad.Actions.Promote
@@ -37,6 +38,7 @@ import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.WindowSwallowing
 import XMonad.Hooks.WorkspaceHistory
+import XMonad.Hooks.InsertPosition
 -- import XMonad.Hooks.RefocusLast
 
     -- Layouts
@@ -223,6 +225,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ [
 		((modm, xK_1), spawn "setxkbmap -layout us"),
 		((modm, xK_2), spawn "setxkbmap -layout ru"),
 		((modm, xK_3), spawn "setxkbmap -layout de"),
+		
+		-- Volume
+		((modm .|. shiftMask, xK_Page_Down), spawn "amixer -q sset Master 5%-"),
+		((modm .|. shiftMask, xK_Page_Up), spawn "amixer -q sset Master 5%+"),
 
 		-- Prompt scripts
 		((modm, xK_Return), spawn "dmenu_run"),
@@ -254,7 +260,7 @@ tall     = renamed [Replace "tall"]
            -- $ addTabs shrinkText myTabTheme
            -- $ subLayout [] (smartBorders Simplest)
            $ limitWindows 5
-           $ mySpacing' 3
+           $ mySpacing 0
            $ ResizableTall 1 (3/100) (1/2) []
 magnified  = renamed [Replace "magnify"]
            $ windowNavigation
@@ -323,11 +329,7 @@ monocle  = renamed [Replace "monocle"]
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
-myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
+myManageHook = insertPosition Below Newer
 
 ------------------------------------------------------------------------
 -- Event handling

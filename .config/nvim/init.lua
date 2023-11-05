@@ -697,6 +697,7 @@ km.set('i', '<C-x>', '<esc>:E<CR>a')
 km.set('i', '<M-s>', '<C-o>$;<CR>')
 km.set('i', '<C-s>', '<C-o>o')
 km.set('i', '<C-q>', '<Esc>[s1z=A')
+km.set('i', '<C-w>', function () vim.cmd('silent write') end)
 -- $navigation keymaps
 km.set('n', '<Up>', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 km.set('n', '<Down>', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
