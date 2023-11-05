@@ -88,6 +88,9 @@ import XMonad.Util.Themes
 myTerminal :: String
 myTerminal = "alacritty"
 
+myBrowser :: String
+myBrowser = "firefox"
+
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 
@@ -100,11 +103,12 @@ myBorderWidth = 0
 myModMask :: KeyMask
 myModMask = mod4Mask
 
+configDir :: String
+configDir = "/home/ramak/.config/xmonad/"
+
 myStartupHook :: X ()
 myStartupHook = do
-	spawn "keynav&"
-	spawn "unclutter -idle 2.0&"
-	spawn "xset r rate 200 30"
+	spawnOnce $ configDir ++ "start.sh"
 	-- spawnOnce "feh --randomize --bg-fill /usr/share/backgrounds/dtos-backgrounds/*"  -- feh set random wallpaper
 
 myWorkspaces :: [String]
@@ -215,6 +219,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ [
   		),
 		((modm, xK_e), spawn ( myTerminal ++ " -e ranger" )),
 		((modm, xK_x), spawn ( myTerminal ++ " -e nvim" )),
+		((modm, xK_w), spawn myBrowser),
 
 		-- Media
 		((modm .|. shiftMask, xK_Right), spawn "playerctl next"), 

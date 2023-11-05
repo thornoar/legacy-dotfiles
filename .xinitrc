@@ -4,11 +4,7 @@
 #
 # Executed by startx (run your window manager from here)
 
-# exec xmonad
-
-xset -dpms
-setterm -blank 0 -powerdown 0
-xset s off
+exec xmonad
 
 # userresources=$HOME/.Xresources
 # usermodmap=$HOME/.Xmodmap
