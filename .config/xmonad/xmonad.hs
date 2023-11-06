@@ -84,6 +84,7 @@ import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
 import XMonad.Util.Themes
+import XMonad.Util.Cursor
 
 myTerminal :: String
 myTerminal = "alacritty"
@@ -109,6 +110,7 @@ configDir = "/home/ramak/.config/xmonad/"
 myStartupHook :: X ()
 myStartupHook = do
 	spawnOnce $ configDir ++ "start.sh"
+	setDefaultCursor xC_pirate
 	-- spawnOnce "feh --randomize --bg-fill /usr/share/backgrounds/dtos-backgrounds/*"  -- feh set random wallpaper
 
 myWorkspaces :: [String]
@@ -232,8 +234,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ [
 		((modm, xK_3), spawn "setxkbmap -layout de"),
 		
 		-- Volume
-		((modm .|. shiftMask, xK_Page_Down), spawn "amixer -q sset Master 5%-"),
-		((modm .|. shiftMask, xK_Page_Up), spawn "amixer -q sset Master 5%+"),
+		((modm .|. shiftMask, xK_Page_Down), spawn "amixer -D pipewire sset Master 5%-"),
+		((modm .|. shiftMask, xK_Page_Up), spawn "amixer -D pipewire sset Master 5%+"),
 
 		-- Prompt scripts
 		((modm, xK_Return), spawn "dmenu_run"),
