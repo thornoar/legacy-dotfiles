@@ -86,7 +86,7 @@ myStartupHook = do
 	spawnOnce "feh --randomize --bg-fill /home/ramak/media/JapanWallpapers"  -- feh set random wallpaper
 
 myWorkspaces :: [String]
-myWorkspaces = [" web ", " dev ", " aux "]
+myWorkspaces = [" 1 ", " 2 ", " 3 "]
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
 --Makes setting the spacingRaw simpler to write. The spacingRaw module adds a configurable amount of space around windows.
@@ -185,7 +185,7 @@ myXPConfig = def
       , promptBorderWidth   = 0
       , promptKeymap        = myXPKeymap
       , position            = Top
-      , height              = 40
+      , height              = 30
       , historySize         = 256
       , historyFilter       = id
       , defaultText         = []
@@ -282,6 +282,10 @@ myKeys = [
         , ("M-S-<Page_Up>", sendMessage (T.Toggle "simplestFloat")) -- Toggles my 'floats' layout
         , ("M-S-<Page_Down>", withFocused $ windows . W.sink)  -- Push floating window back to tile
         , ("M-S-t", sinkAll)                       -- Push ALL floating windows to tile
+
+	-- Special
+		-- , ("M-l", spawn "xdotool key Right")
+		-- , ("M-k", spawn "xdotool key Left")
         ]
     -- Appending search engine prompts to keybindings list.
     -- Look at "search engines" section of this config for values for "k".

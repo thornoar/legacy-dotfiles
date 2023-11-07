@@ -1,4 +1,4 @@
-export PATH=$HOME/projects/scripts:$HOME/projects/programming/.venv/bin:$PATH
+export PATH=$HOME/projects/scripts:$PATH
 export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 export ZDOTDIR="$HOME/.config/zsh"
 export XDG_DATA_HOME=$HOME/.local/share
