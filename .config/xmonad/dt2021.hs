@@ -881,7 +881,7 @@ myKeys =
 
 main :: IO ()
 main = do
-    -- Launching three instances of xmobar on their monitors.
+	-- Launching three instances of xmobar on their monitors.
     xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.config/xmobar/xmobarrc0"
     xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmobar/xmobarrc2"
     xmproc2 <- spawnPipe "xmobar -x 2 $HOME/.config/xmobar/xmobarrc1"

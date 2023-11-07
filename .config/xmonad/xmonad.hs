@@ -1,45 +1,24 @@
--- Base
-import Data.Monoid
+	-- Base
 import XMonad
-import System.Directory
-import System.IO (hClose, hPutStr, hPutStrLn)
-import System.Exit (exitSuccess)
 import qualified XMonad.StackSet as W
 import System.Exit
 
     -- Actions
-import XMonad.Actions.CopyWindow (kill1)
 import XMonad.Actions.CycleWS
--- import XMonad.Actions.Volume
-import XMonad.Actions.GridSelect
-import XMonad.Actions.MouseResize
-import XMonad.Actions.Promote
 import XMonad.Actions.RotSlaves (rotSlavesDown, rotAllDown)
-import XMonad.Actions.WindowGo (runOrRaise)
 import XMonad.Actions.WithAll (sinkAll, killAll)
+import XMonad.Actions.Minimize
 import qualified XMonad.Actions.Search as S
 
     -- Data
 import Data.Char (isSpace, toUpper)
 import Data.Maybe (fromJust)
-import Data.Monoid
 import Data.Maybe (isJust)
-import Data.Tree
+-- import Data.Tree
 import qualified Data.Map as M
 
     -- Hooks
-import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
-import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
-import XMonad.Hooks.ManageDocks (avoidStruts, docks, manageDocks, ToggleStruts(..))
-import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat, doCenterFloat)
-import XMonad.Hooks.ServerMode
-import XMonad.Hooks.SetWMName
-import XMonad.Hooks.StatusBar
-import XMonad.Hooks.StatusBar.PP
-import XMonad.Hooks.WindowSwallowing
-import XMonad.Hooks.WorkspaceHistory
 import XMonad.Hooks.InsertPosition
--- import XMonad.Hooks.RefocusLast
 
     -- Layouts
 import XMonad.Layout.Accordion
@@ -49,6 +28,8 @@ import XMonad.Layout.Spiral
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.Minimize
+import qualified XMonad.Layout.BoringWindows as BW
 
     -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
@@ -69,22 +50,14 @@ import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
    -- Prompts
 import XMonad.Prompt
 import XMonad.Prompt.Input
-import XMonad.Prompt.FuzzyMatch
 import XMonad.Prompt.Man
-import XMonad.Prompt.Pass
 import XMonad.Prompt.Shell
-import XMonad.Prompt.Unicode
 import XMonad.Prompt.XMonad
 import Control.Arrow (first)
 
    -- Utilities
-import XMonad.Util.Hacks (windowedFullscreenFixEventHook, javaHack, trayerAboveXmobarEventHook, trayAbovePanelEventHook, trayerPaddingXmobarEventHook, trayPaddingXmobarEventHook, trayPaddingEventHook)
-import XMonad.Util.NamedActions
-import XMonad.Util.NamedScratchpad
-import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
-import XMonad.Util.Themes
-import XMonad.Util.Cursor
+import XMonad.Util.EZConfig (additionalKeysP)
 
 myTerminal :: String
 myTerminal = "alacritty"
@@ -110,11 +83,10 @@ configDir = "/home/ramak/.config/xmonad/"
 myStartupHook :: X ()
 myStartupHook = do
 	spawnOnce $ configDir ++ "start.sh"
-	setDefaultCursor xC_pirate
-	-- spawnOnce "feh --randomize --bg-fill /usr/share/backgrounds/dtos-backgrounds/*"  -- feh set random wallpaper
+	spawnOnce "feh --randomize --bg-fill /home/ramak/media/JapanWallpapers"  -- feh set random wallpaper
 
 myWorkspaces :: [String]
-myWorkspaces = [" web ", " dev ", " media ", " sys ", " aux "]
+myWorkspaces = [" web ", " dev ", " aux "]
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
 --Makes setting the spacingRaw simpler to write. The spacingRaw module adds a configurable amount of space around windows.
@@ -127,20 +99,19 @@ mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spac
 mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
 myFont :: String
-myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
+-- myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
+myFont = "xft:Hack Mono:regular:size=10:antialias=true:hinting=true"
 
-archwiki, ebay, news, reddit, urban, yacy :: S.SearchEngine
+windowCount :: X (Maybe String)
+windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
+
+archwiki, news, reddit :: S.SearchEngine
 archwiki = S.searchEngine "archwiki" "https://wiki.archlinux.org/index.php?search="
-ebay     = S.searchEngine "ebay" "https://www.ebay.com/sch/i.html?_nkw="
 news     = S.searchEngine "news" "https://news.google.com/search?q="
 reddit   = S.searchEngine "reddit" "https://www.reddit.com/search/?q="
-urban    = S.searchEngine "urban" "https://www.urbandictionary.com/define.php?term="
-yacy     = S.searchEngine "yacy" "http://localhost:8090/yacysearch.html?query="
 
 searchList :: [(String, S.SearchEngine)]
 searchList = [ ("a", archwiki)
-             , ("d", S.duckduckgo)
-             , ("e", ebay)
              , ("g", S.google)
              , ("h", S.hoogle)
              , ("i", S.images)
@@ -149,12 +120,8 @@ searchList = [ ("a", archwiki)
              , ("s", S.stackage)
              , ("t", S.thesaurus)
              , ("v", S.vocabulary)
-             , ("b", S.wayback)
-             , ("u", urban)
              , ("w", S.wikipedia)
              , ("y", S.youtube)
-             , ("S-y", yacy)
-             , ("z", S.amazon)
              ]
 
 -- setting colors for tabs layout and tabs sublayout.
@@ -170,202 +137,207 @@ myTabTheme = def { fontName            = myFont
 myNormalBorderColor  = "#dddddd"
 myFocusedBorderColor = "#ff0000"
 
-myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ [ 
-		((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf),
-		-- Kill focused window
-		((modm, xK_c), kill),
-		-- Rotate through the available layout algorithms
-		((modm .|. shiftMask, xK_Down), sendMessage NextLayout),
-		--  Reset the layouts on the current workspace to default
-		((modm .|. shiftMask, xK_Up), setLayout $ XMonad.layoutHook conf),
-		-- Resize viewed windows to the correct size
-		((modm, xK_n), refresh),
-		-- Move focus to the next window
-		((modm, xK_Down), sendMessage $ Go D),
-		-- Move focus to the previous window
-		((modm, xK_Up), sendMessage $ Go U),
-		-- Move focus to the master window
-		((modm, xK_Left), sendMessage $ Go L),
-		-- Move focus back to previous window
-		((modm, xK_Right), sendMessage $ Go R),
-		-- Cycle through windows
-		((modm, xK_slash), windows W.focusDown),
-		-- Swap the focused window and the master window
-		((modm .|. mod1Mask, xK_Left), windows W.swapMaster),
-		-- Swap the focused window with the next window
-		((modm .|. mod1Mask, xK_Down), windows W.swapDown),
-		-- Swap the focused window with the previous window
-		((modm .|. mod1Mask, xK_Up), windows W.swapUp),
-		-- Shrink the master area
-		((modm .|. shiftMask, xK_comma), sendMessage Shrink),
-		-- Expand the master area
-		((modm .|. shiftMask, xK_period), sendMessage Expand),
-		-- Push window back into tiling
-		((modm, xK_t), withFocused $ windows . W.sink),
-		-- Increment the number of windows in the master area
-		((modm, xK_comma), sendMessage (IncMasterN 1)),
-		-- Deincrement the number of windows in the master area
-		((modm, xK_period), sendMessage (IncMasterN (-1))),
-		-- Restart xmonad
-		((modm .|. mod1Mask, xK_Home), spawn "xmonad --recompile; xmonad --restart"),
-		-- Workspaces
-		((modm, xK_Page_Down), nextWS),
-		((modm, xK_Page_Up), prevWS),
-		((modm .|. mod1Mask, xK_Page_Down), do
+myXPKeymap :: M.Map (KeyMask,KeySym) (XP ())
+myXPKeymap = M.fromList $
+     map (first $ (,) controlMask)      -- control + <key>
+     [ (xK_z, killBefore)               -- kill line backwards
+     , (xK_x, killAfter)                -- kill line forwards
+     , (xK_Home, startOfLine)              -- move to the beginning of the line
+     , (xK_End, endOfLine)                -- move to the end of the line
+     , (xK_Left, moveCursor Prev)          -- move cursor forward
+     , (xK_Right, moveCursor Next)          -- move cursor backward
+     , (xK_BackSpace, killWord Prev)    -- kill the previous word
+     , (xK_v, pasteString)              -- paste a string
+     ]
+     ++
+     map (first $ (,) myModMask)          -- meta key + <key>
+     [ (xK_BackSpace, killWord Prev)    -- kill the prev word
+     , (xK_c, quit)                     -- quit out of prompt
+     , (xK_f, moveWord Next)            -- move a word forward
+     , (xK_b, moveWord Prev)            -- move a word backward
+     , (xK_d, killWord Next)            -- kill the next word
+     , (xK_n, moveHistory W.focusUp')   -- move up thru history
+     , (xK_p, moveHistory W.focusDown') -- move down thru history
+     ]
+     ++
+     map (first $ (,) 0) -- <key>
+     [ (xK_Return, setSuccess True >> setDone True)
+     , (xK_KP_Enter, setSuccess True >> setDone True)
+     , (xK_BackSpace, deleteString Prev)
+     , (xK_Delete, deleteString Next)
+     , (xK_Left, moveCursor Prev)
+     , (xK_Right, moveCursor Next)
+     , (xK_Home, startOfLine)
+     , (xK_End, endOfLine)
+     , (xK_Down, moveHistory W.focusUp')
+     , (xK_Up, moveHistory W.focusDown')
+     , (xK_Escape, quit)
+     ]
+
+myXPConfig :: XPConfig
+myXPConfig = def
+      { font                = myFont
+      , bgColor             = "#282c34"
+      , fgColor             = "#bbc2cf"
+      , bgHLight            = "#c792ea"
+      , fgHLight            = "#000000"
+      , borderColor         = "#535974"
+      , promptBorderWidth   = 0
+      , promptKeymap        = myXPKeymap
+      , position            = Top
+      , height              = 40
+      , historySize         = 256
+      , historyFilter       = id
+      , defaultText         = []
+      , autoComplete        = Nothing  -- set Just 100000 for .1 sec
+      , showCompletionOnTab = False
+      , defaultPrompter     = id $ map toUpper  -- change prompt to UPPER
+      , alwaysHighlight     = True
+      , maxComplRows        = Just 5      -- set to 'Just 5' for 5 rows
+      }
+
+myKeys :: [(String, X ())]
+myKeys = [
+    -- Xmonad
+        ("M-M1-<Home>", spawn (myTerminal ++ " --hold -e sh -c 'xmonad --recompile; xmonad --restart; echo Done!'")) -- Recompiles xmonad
+
+    -- Run Prompt
+        , ("M-<Return>", shellPrompt myXPConfig) -- Xmonad Shell Prompt
+
+    -- Other Prompts
+        , ("M-v m", manPrompt myXPConfig)          -- manPrompt
+        , ("M-v x", xmonadPrompt myXPConfig)       -- xmonadPrompt
+
+    -- Useful programs to have a keybinding for launch
+        , ("M-v b", spawn (myTerminal ++ " -e btop"))
+
+    -- Kill windows
+        , ("M-c", kill)     -- Kill the currently focused client
+        , ("M-M1-a", killAll)   -- Kill all windows on current workspace
+
+	-- Quick Programs
+		, ("M-e", spawn ( myTerminal ++ " -e ranger" ))
+		, ("M-x", spawn ( myTerminal ++ " -e nvim" ))
+		, ("M-w", spawn myBrowser)
+		, ("M-a", spawn myTerminal)
+	
+    -- Workspaces
+	    , ("M-<Page_Down>", nextWS)
+		, ("M-<Page_Up>", prevWS)
+		, ("M-M1-<Page_Down>", do
 			shiftToNext
   			nextWS
-  		),
-		((modm .|. mod1Mask, xK_Page_Up), do
+  		)
+		, ("M-M1-<Page_Up>", do
 			shiftToPrev
 			prevWS
-  		),
-		((modm, xK_e), spawn ( myTerminal ++ " -e ranger" )),
-		((modm, xK_x), spawn ( myTerminal ++ " -e nvim" )),
-		((modm, xK_w), spawn myBrowser),
+  		)
 
-		-- Media
-		((modm .|. shiftMask, xK_Right), spawn "playerctl next"), 
-		((modm .|. shiftMask, xK_Left), spawn "playerctl previous"),
-		((modm, xK_space), spawn "playerctl play-pause"),
-	
-		-- Language layouts
-		((modm, xK_1), spawn "setxkbmap -layout us"),
-		((modm, xK_2), spawn "setxkbmap -layout ru"),
-		((modm, xK_3), spawn "setxkbmap -layout de"),
-		
-		-- Volume
-		((modm .|. shiftMask, xK_Page_Down), spawn "amixer -D pipewire sset Master 5%-"),
-		((modm .|. shiftMask, xK_Page_Up), spawn "amixer -D pipewire sset Master 5%+"),
+    -- Windows navigation
+		, ("M-<Down>", sendMessage $ Go D)
+		, ("M-<Up>", sendMessage $ Go U)
+		, ("M-<Left>", sendMessage $ Go L)
+		, ("M-<Right>", sendMessage $ Go R)
+		, ("M-/", windows W.focusDown)
+		, ("M-M1-<Left>", windows W.swapMaster)
+		, ("M-M1-<Down>", windows W.swapDown)
+		, ("M-M1-<Up>", windows W.swapUp)
+        , ("M-M1-<Right>", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
+		, ("M-C-<Left>", windows W.focusUp)
+		, ("M-C-<Right>", windows W.focusDown)
+		, ("M-d", withFocused minimizeWindow)
+		, ("M-b", withLastMinimized maximizeWindow)
 
-		-- Prompt scripts
-		((modm, xK_Return), spawn "dmenu_run"),
-		-- ((modm, xK_v), manPrompt )
+    -- Layouts
+        , ("M-S-<Down>", sendMessage NextLayout)           -- Switch to next layout
+        , ("M-S-<Up>", sendMessage FirstLayout)           -- Switch to next layout
+		, ("M-S-/", sendMessage (MT.Toggle NBFULL)) -- Toggles noborder
+		-- , ("M-t", sendMessage ToggleStruts)
 
-		((modm, xK_a), spawn myTerminal)
-	]
+    -- Increase/decrease windows in the master pane or the stack
+        , ("M-S-,", sendMessage (IncMasterN 1))      -- Increase number of clients in master pane
+        , ("M-S-.", sendMessage (IncMasterN (-1))) -- Decrease number of clients in master pane
+        -- , ("M-C-<Up>", increaseLimit)                   -- Increase number of windows
+        -- , ("M-C-<Down>", decreaseLimit)                 -- Decrease number of windows
+
+    -- Window resizing
+        , ("M-C-,", sendMessage Shrink)                   -- Shrink horiz window width
+        , ("M-C-.", sendMessage Expand)                   -- Expand horiz window width
+        , ("M-C-'", sendMessage MirrorShrink)          -- Shrink vert window width
+        , ("M-C-;", sendMessage MirrorExpand)          -- Expand vert window width
+
+	-- Keyboard Layouts
+		, ("M-1", spawn "setxkbmap -layout us")
+		, ("M-2", spawn "setxkbmap -layout ru")
+		, ("M-3", spawn "setxkbmap -layout de")
+
+    -- Multimedia Keys
+		, ("M-C-<Page_Down>", spawn "amixer -D pipewire sset Master 5%-")
+		, ("M-C-<Page_Up>", spawn "amixer -D pipewire sset Master 5%+")
+		, ("M-S-<Right>", spawn "playerctl next")
+		, ("M-S-<Left>", spawn "playerctl previous")
+		, ("M-<Space>", spawn "playerctl play-pause")
+
+    -- Floating windows
+        , ("M-S-<Page_Up>", sendMessage (T.Toggle "simplestFloat")) -- Toggles my 'floats' layout
+        , ("M-S-<Page_Down>", withFocused $ windows . W.sink)  -- Push floating window back to tile
+        , ("M-S-t", sinkAll)                       -- Push ALL floating windows to tile
+        ]
+    -- Appending search engine prompts to keybindings list.
+    -- Look at "search engines" section of this config for values for "k".
+        ++ [("M-f " ++ k, S.promptSearch myXPConfig f) | (k,f) <- searchList ]
+        ++ [("M-S-f " ++ k, S.selectSearch f) | (k,f) <- searchList ]
 
 ------------------------------------------------------------------------
 -- Layouts:
 
--- You can specify and transform your layouts by modifying these values.
--- If you change layout bindings be sure to use 'mod-shift-space' after
--- restarting (with 'mod-q') to reset your layout state to the new
--- defaults, as xmonad preserves your old layout settings by default.
---
--- The available layouts.  Note that each layout is separated by |||,
--- which denotes layout choice.
+myLayout = tall ||| Full ||| magnified ||| tabs
 
-
--- Defining a bunch of layouts, many that I don't use.
--- limitWindows n sets maximum number of windows displayed for layout.
--- mySpacing n sets the gap size around the windows.
-
-myLayout = tall ||| Full ||| magnified
-
-tall     = renamed [Replace "tall"]
-           $ windowNavigation
-           -- $ addTabs shrinkText myTabTheme
-           -- $ subLayout [] (smartBorders Simplest)
+tall     = windowNavigation
            $ limitWindows 5
            $ mySpacing 0
            $ ResizableTall 1 (3/100) (1/2) []
-magnified  = renamed [Replace "magnify"]
-           $ windowNavigation
-           -- $ addTabs shrinkText myTabTheme
-           -- $ subLayout [] (smartBorders Simplest)
+magnified = windowNavigation
            $ magnifier
            $ limitWindows 12
-           -- $ mySpacing 3
            $ ResizableTall 1 (3/100) (1/2) []
-monocle  = renamed [Replace "monocle"]
-           $ windowNavigation
-           -- $ addTabs shrinkText myTabTheme
-           -- $ subLayout [] (smartBorders Simplest)
+monocle = windowNavigation
            $ limitWindows 20 Full
--- floats   = renamed [Replace "floats"]
---            $ windowNavigation
---            $ addTabs shrinkText myTabTheme
---            $ subLayout [] (smartBorders Simplest)
---            $ limitWindows 20 simplestFloat
--- grid     = renamed [Replace "grid"]
---            $ windowNavigation
---            $ addTabs shrinkText myTabTheme
---            $ subLayout [] (smartBorders Simplest)
---            $ limitWindows 12
---            $ mySpacing 0
---            $ mkToggle (single MIRROR)
---            $ Grid (16/10)
--- spirals  = renamed [Replace "spirals"]
---            $ windowNavigation
---            $ addTabs shrinkText myTabTheme
---            $ subLayout [] (smartBorders Simplest)
---            $ mySpacing' 8
---            $ spiral (6/7)
--- threeCol = renamed [Replace "threeCol"]
---            $ windowNavigation
---            $ addTabs shrinkText myTabTheme
---            $ subLayout [] (smartBorders Simplest)
---            $ limitWindows 7
---            $ ThreeCol 1 (3/100) (1/2)
--- threeRow = renamed [Replace "threeRow"]
---            $ windowNavigation
---            $ addTabs shrinkText myTabTheme
---            $ subLayout [] (smartBorders Simplest)
---            $ limitWindows 7
---            -- Mirror takes a layout and rotates it by 90 degrees.
---            -- So we are applying Mirror to the ThreeCol layout.
---            $ Mirror
---            $ ThreeCol 1 (3/100) (1/2)
--- tabs     = renamed [Replace "tabs"]
---            -- I cannot add spacing to this layout because it will
---            -- add spacing between window and tabs which looks bad.
---            $ tabbed shrinkText myTabTheme
+grid = windowNavigation
+           $ subLayout [] (smartBorders Simplest)
+           $ limitWindows 12
+           $ mySpacing 0
+           $ mkToggle (single MIRROR)
+           $ Grid (16/10)
+spirals = mySpacing 0
+		   $ windowNavigation
+		   $ spiral (6/7)
+threeCol = windowNavigation
+           $ limitWindows 7
+           $ ThreeCol 1 (3/100) (1/2)
+tabs = windowNavigation $ tabbed shrinkText myTabTheme
 
 ------------------------------------------------------------------------
 -- Window rules:
 
--- Execute arbitrary actions and WindowSet manipulations when managing
--- a new window. You can use this to, for example, always float a
--- particular program, or have a client always appear on a particular
--- workspace.
---
--- To find the property name associated with a program, use
--- > xprop | grep WM_CLASS
--- and click on the client you're interested in.
---
--- To match on the WM_NAME, you can use 'title' in the same way that
--- 'className' and 'resource' are used below.
---
 myManageHook = insertPosition Below Newer
 
 ------------------------------------------------------------------------
 -- Event handling
 
--- * EwmhDesktops users should change this to ewmhDesktopsEventHook
---
--- Defines a custom handler function for X Events. The function should
--- return (All True) if the default handler is to be run afterwards. To
--- combine event hooks use mappend or mconcat from Data.Monoid.
---
 myEventHook = mempty
 
 ------------------------------------------------------------------------
 -- Status bars and logging
 
--- Perform an arbitrary action on each internal state change or X event.
--- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
 myLogHook = return ()
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
--- Run xmonad with the settings you specify. No need to modify this.
---
 main = xmonad defaults
 
 defaults = def {
-      -- simple stuff
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
@@ -374,14 +346,9 @@ defaults = def {
         workspaces         = myWorkspaces,
         normalBorderColor  = myNormalBorderColor,
         focusedBorderColor = myFocusedBorderColor,
-
-      -- key bindings
-        keys               = myKeys,
-
-      -- hooks, layouts
-        layoutHook         = myLayout,
+        layoutHook         = minimize . BW.boringWindows $ myLayout,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
-        logHook            = myLogHook,
+		logHook = myLogHook,
         startupHook        = myStartupHook
-    }
+    } `additionalKeysP` myKeys
