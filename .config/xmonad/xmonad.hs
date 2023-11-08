@@ -81,26 +81,15 @@ configDir :: String
 configDir = "/home/ramak/.config/xmonad/"
 
 myStartupHook :: X ()
-myStartupHook = do
-	spawnOnce $ configDir ++ "start.sh"
-	spawnOnce "feh --randomize --bg-fill /home/ramak/media/JapanWallpapers"  -- feh set random wallpaper
+myStartupHook = spawnOnce $ configDir ++ "start.sh"
 
 myWorkspaces :: [String]
 myWorkspaces = [" 1 ", " 2 ", " 3 "]
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
---Makes setting the spacingRaw simpler to write. The spacingRaw module adds a configurable amount of space around windows.
-mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
-mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
-
--- Below is a variation of the above except no borders are applied
--- if fewer than two windows. So a single window has no gaps.
-mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
-mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
-
 myFont :: String
 -- myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
-myFont = "xft:Hack Mono:regular:size=10:antialias=true:hinting=true"
+myFont = "xft:Hack Mono:regular:size=11:bold=true:antialias=true:hinting=true"
 
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
@@ -126,12 +115,13 @@ searchList = [ ("a", archwiki)
 
 -- setting colors for tabs layout and tabs sublayout.
 myTabTheme = def { fontName            = myFont
-                 , activeColor         = "#46d9ff"
+                 , activeColor         = "#89a870"  
                  , inactiveColor       = "#313846"
-                 , activeBorderColor   = "#46d9ff"
+                 , activeBorderColor   = "#89a870"
                  , inactiveBorderColor = "#282c34"
-                 , activeTextColor     = "#282c34"
-                 , inactiveTextColor   = "#d0d0d0"
+                 , activeTextColor     = "#03051e"
+                 , inactiveTextColor   = "#a2afbe"
+				 , decoHeight		   = 25
                  }
 
 myNormalBorderColor  = "#dddddd"
@@ -196,6 +186,9 @@ myXPConfig = def
       , maxComplRows        = Just 5      -- set to 'Just 5' for 5 rows
       }
 
+myPrograms :: [String]
+myPrograms = [ myTerminal++" -e btop", "telegram-desktop", "discord", "obs" ]
+
 myKeys :: [(String, X ())]
 myKeys = [
     -- Xmonad
@@ -207,9 +200,6 @@ myKeys = [
     -- Other Prompts
         , ("M-v m", manPrompt myXPConfig)          -- manPrompt
         , ("M-v x", xmonadPrompt myXPConfig)       -- xmonadPrompt
-
-    -- Useful programs to have a keybinding for launch
-        , ("M-v b", spawn (myTerminal ++ " -e btop"))
 
     -- Kill windows
         , ("M-c", kill)     -- Kill the currently focused client
@@ -243,8 +233,8 @@ myKeys = [
 		, ("M-M1-<Down>", windows W.swapDown)
 		, ("M-M1-<Up>", windows W.swapUp)
         , ("M-M1-<Right>", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
-		, ("M-C-<Left>", windows W.focusUp)
-		, ("M-C-<Right>", windows W.focusDown)
+		, ("M-<Home>", windows W.focusUp)
+		, ("M-<End>", windows W.focusDown)
 		, ("M-d", withFocused minimizeWindow)
 		, ("M-b", withLastMinimized maximizeWindow)
 
@@ -272,54 +262,63 @@ myKeys = [
 		, ("M-3", spawn "setxkbmap -layout de")
 
     -- Multimedia Keys
-		, ("M-C-<Page_Down>", spawn "amixer -D pipewire sset Master 5%-")
-		, ("M-C-<Page_Up>", spawn "amixer -D pipewire sset Master 5%+")
+		, ("M-S-<Page_Down>", spawn "amixer sset Master 5%-")
+		, ("M-S-<Page_Up>", spawn "amixer sset Master 5%+")
 		, ("M-S-<Right>", spawn "playerctl next")
 		, ("M-S-<Left>", spawn "playerctl previous")
 		, ("M-<Space>", spawn "playerctl play-pause")
 
     -- Floating windows
-        , ("M-S-<Page_Up>", sendMessage (T.Toggle "simplestFloat")) -- Toggles my 'floats' layout
-        , ("M-S-<Page_Down>", withFocused $ windows . W.sink)  -- Push floating window back to tile
+        , ("M-C-<Page_Up>", sendMessage (T.Toggle "simplestFloat")) -- Toggles my 'floats' layout
+        , ("M-C-<Page_Down>", withFocused $ windows . W.sink)  -- Push floating window back to tile
         , ("M-S-t", sinkAll)                       -- Push ALL floating windows to tile
-
-	-- Special
-		-- , ("M-l", spawn "xdotool key Right")
-		-- , ("M-k", spawn "xdotool key Left")
         ]
     -- Appending search engine prompts to keybindings list.
     -- Look at "search engines" section of this config for values for "k".
         ++ [("M-f " ++ k, S.promptSearch myXPConfig f) | (k,f) <- searchList ]
         ++ [("M-S-f " ++ k, S.selectSearch f) | (k,f) <- searchList ]
+		++ [("M-q " ++ (show k), spawn prog) | (k, prog) <- zip [1..(length myPrograms)] myPrograms]
 
 ------------------------------------------------------------------------
 -- Layouts:
 
+--Makes setting the spacingRaw simpler to write. The spacingRaw module adds a configurable amount of space around windows.
+mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
+
+-- Below is a variation of the above except no borders are applied
+-- if fewer than two windows. So a single window has no gaps.
+mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
+
+mySpace, mySpace' :: Integer
+mySpace = 5
+mySpace' = 4
+
 myLayout = tall ||| Full ||| magnified ||| tabs
 
-tall     = windowNavigation
+tall = windowNavigation
            $ limitWindows 5
-           $ mySpacing 0
+           $ mySpacing mySpace
            $ ResizableTall 1 (3/100) (1/2) []
 magnified = windowNavigation
            $ magnifier
+		   $ mySpacing mySpace
            $ limitWindows 12
            $ ResizableTall 1 (3/100) (1/2) []
-monocle = windowNavigation
-           $ limitWindows 20 Full
 grid = windowNavigation
            $ subLayout [] (smartBorders Simplest)
            $ limitWindows 12
-           $ mySpacing 0
+           $ mySpacing mySpace
            $ mkToggle (single MIRROR)
            $ Grid (16/10)
-spirals = mySpacing 0
+spirals = mySpacing mySpace
 		   $ windowNavigation
 		   $ spiral (6/7)
 threeCol = windowNavigation
            $ limitWindows 7
            $ ThreeCol 1 (3/100) (1/2)
-tabs = windowNavigation $ tabbed shrinkText myTabTheme
+tabs = windowNavigation $ mySpacing mySpace' $ tabbed shrinkText myTabTheme
 
 ------------------------------------------------------------------------
 -- Window rules:

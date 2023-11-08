@@ -78,7 +78,7 @@ window:
     lines: 65
 
   padding:
-    x: 5
+    x: 6
     y: 5
 
   decorations: full

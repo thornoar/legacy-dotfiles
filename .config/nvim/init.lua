@@ -69,10 +69,10 @@ require('lazy').setup({
 		opts = {}
 	},
 
-	{
-		'glepnir/dashboard-nvim',
-		dependencies = {{'nvim-tree/nvim-web-devicons'}},
-	},
+	-- {
+	-- 	'glepnir/dashboard-nvim',
+	-- 	dependencies = {{'nvim-tree/nvim-web-devicons'}},
+	-- },
 
 	{
 		'navarasu/onedark.nvim',
@@ -263,66 +263,6 @@ require('tabby.tabline').set(function(line)
 	}
 end)
 
-
--- $dashboard setup
-vim.g.dashboard_default_executive = 'telescope'
-require('dashboard').setup({
-	theme = 'hyper',
-	event = 'VimEnter',
-	config = {
-		packages = {enable = true},
-		header = {
-			[[                                   ░▓▓                                 ]],
-			[[                                ▓▓▓▓▓▓▓▓▓                              ]],
-			[[                         ▓░  ▓▓▓▓▓▓▓▓▓▓▓                               ]],
-			[[                       ▓▓▓  ▓▓▓▓▓▓▓▓▓▓▓▓                               ]],
-			[[                 ▓    ▓▓▓   ▓▒      ░▓▓▓▓▓                             ]],
-			[[               ▒▓▓   ▓▓▓▓          ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒                 ]],
-			[[               ▓▓▓  ▓▓▓▓▓   ▓▓▓   ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓             ]],
-			[[               ▓▓▓▓▒▓▓▓▓▓ ▓▓▓▓▒   ▓▓░      ▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓           ]],
-			[[              ▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓                   ▒▓▓▓▓▓▓▓▓▓▓▓          ]],
-			[[              ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   ░▓▓▓▓     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓         ]],
-			[[              ▓▓▓▓▓   ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓    ▓▓▓▓▓▓▓▓▓▓          ▓         ]],
-			[[              ▓▓▓▓▓ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   ▒▓▓▓▓▓▓▓▓▓▓▓                     ]],
-			[[             ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   ░▓▓▓▓▓▓▓▓▓▓▓                    ]],
-			[[            ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   ▓▓▓▓▓▓▓▓▓▓▓                   ]],
-			[[     ▓     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   ▓▓▓▓▓▓▓▓▓▓▓▓▓                ]],
-			[[    ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░   ▓▓▓▓▓▓▓▓▓▒           ▓▓▓▓▓▓▓▓▓▓▓▓              ]],
-			[[     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓     ▓▓▓▓▓▓▓     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓            ]],
-			[[     ▓▓▓▓▓▓▓▓▓▓▓▓       ▓▓▓▓▓░    ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓           ]],
-			[[      ▓▓▓▓▓ ▓▓        ▓▓▓▓▓▓▓         ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒          ]],
-			[[        ▓▓▓       ▓▓▓▓▓▓▓▓▓▓            ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓           ]],
-			[[                ▓▓▓▓▓▓▓  ▒▓▓            ▓▓▓▓▓▓▓▓▓▓▓▓      ▓▓           ]],
-			[[             ▓▓▓▓▓▓▓▓                  ▓▓▓▓▓▓▓▓▓▓▓▓                    ]],
-			[[               ▓▓▓▓▓▓                ▓▓▓▓▓▓▓▓▓▓▓▓▓▓                    ]],
-			[[                  ▓▓▓▓▓          ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓                    ]],
-			[[                            ░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓                   ]],
-			[[																		]],
-			[[																		]],
-		},
-		footer = {
-			[[]],
-			[[]],
-			[[You wanna do something already?]]
-		},
-		shortcut = {
-			{ desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
-			{
-				desc = ' Files',
-				group = 'Label',
-				action = 'Telescope find_files hidden=true',
-				key = '/',
-			},
-			{
-				desc = ' Config',
-				group = 'Label',
-				action = 'edit ~/.config/nvim/init.lua',
-				key = 'c',
-			},
-		},
-	},
-})
-
 -- $telescope setup
 require('telescope').setup {
 	defaults = {
@@ -347,6 +287,7 @@ km.set('n', 'tb', require('telescope.builtin').builtin, { desc = '[T]elescope [B
 -- km.set('n', '<leader>gf', require('telescope').extensions.repo.list, { desc = 'Search [G]it [F]iles' })
 km.set('n', '<leader>cv', require('telescope').extensions.neoclip['a'], { desc = 'Search Clipboard' })
 km.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+km.set('n', '<C-d>', require('telescope.builtin').oldfiles, { desc = '[S]earch [F]iles' })
 km.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 km.set('n', '<leader>sw', require'telescope.builtin'.grep_string, { desc = '[S]earch current [W]ord' })
 km.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
@@ -671,6 +612,7 @@ end)
 newcmd('E', function () vim.o.keymap = '' end)
 newcmd('R', function () vim.o.keymap = 'russian-jcuken' end)
 newcmd('J', function () vim.o.keymap = 'kana' end)
+newcmd('L', function () vim.cmd('Lazy') end)
 newcmd('S', function () vim.o.spell = not vim.o.spell end)
 newcmd('NS', function () vim.cmd('set nospell') end)
 
@@ -749,8 +691,9 @@ km.set('n', '<leader>f', 'zf%')
 -- $command keymaps
 km.set('n', '<leader>tr', function () vim.cmd('silent !alacritty&') end)
 km.set('n', '<leader>l', function () vim.cmd('tabnew ~/.config/nvim/init.lua') end)
+km.set('n', '<leader>k', function () vim.cmd('edit ~/.config/nvim/init.lua') end)
 km.set('n', '<leader>o', ':Compile<CR>')
-km.set('n', '<leader>k', function () vim.cmd('CompileSilent') end)
+km.set('n', '<leader>i', function () vim.cmd('CompileSilent') end)
 km.set('n', '<leader>vp', function () vim.cmd('ViewPdf') end)
 km.set('n', '<leader>vg', function () vim.cmd('ViewGif') end)
 km.set('n', '<leader>vv', function () vim.cmd('View') end)
@@ -763,8 +706,3 @@ km.set('n', 'd]', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic mess
 km.set('n', '<leader>de', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 km.set('n', '<leader>dq', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 km.set('n', '<C-e>', function () vim.cmd('tabnew') end)
-km.set('n', '<C-d>', function ()
-	vim.cmd('silent tabonly')
-	vim.cmd('cd ' .. home)
-	vim.cmd('Dashboard')
-end)
