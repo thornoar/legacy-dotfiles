@@ -265,6 +265,11 @@ end)
 
 -- $telescope setup
 require('telescope').setup {
+	pickers = {
+		find_files = {
+			hidden = true
+		}
+	},
 	defaults = {
 		mappings = {
 			i = {
@@ -705,4 +710,7 @@ km.set('n', 'd[', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic 
 km.set('n', 'd]', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 km.set('n', '<leader>de', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 km.set('n', '<leader>dq', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
-km.set('n', '<C-e>', function () vim.cmd('tabnew') end)
+km.set('n', '<C-e>', function ()
+	vim.cmd('cd /home/ramak')
+	vim.cmd('tabnew')
+end)

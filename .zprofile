@@ -25,4 +25,4 @@ export TERMINAL="alacritty"
 export BROWSER="firefox"
 export READER="zathura"
 
-exec startx > /dev/null 2>&1
+# exec startx > /dev/null 2>&1

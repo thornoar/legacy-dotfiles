@@ -76,7 +76,7 @@ alias books='cd /ext/media/Books'
 alias up='sudo pacman -Syu'
 alias get='sudo pacman -S --noconfirm'
 alias q='exit'
-alias getsetup='~/projects/scripts/getsetup.sh'
+alias getsetup='pacman -Qqe'
 alias ls='ls $LS_OPTIONS'
 alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 alias cp="cp -i"                                                # Confirm before overwriting something
@@ -85,6 +85,7 @@ alias free='free -m'                                            # Show sizes in 
 alias gitu='git add . && git commit && git push'
 alias dgit='cd ~/Downloads/git'
 alias tr='transmission-remote'
+alias br='xrandr --output HDMI-0 --brightness'
 
 eval $(thefuck --alias)
 eval "$(dircolors -b)"
