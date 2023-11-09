@@ -13,3 +13,5 @@ unclutter -idle 0.5 &
 keynav &
 
 feh --randomize --bg-fill /home/ramak/Wallpapers
+
+transmission-daemon --download-dir "/home/ramak/media/Films"

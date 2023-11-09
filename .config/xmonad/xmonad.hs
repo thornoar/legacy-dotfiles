@@ -243,6 +243,7 @@ myKeys = [
         , ("M-S-<Up>", sendMessage FirstLayout)           -- Switch to next layout
 		, ("M-S-/", sendMessage (MT.Toggle NBFULL)) -- Toggles noborder
 		-- , ("M-t", sendMessage ToggleStruts)
+	    , ("M-S-p", spawn "feh --randomize --bg-fill /home/ramak/Wallpapers")
 
     -- Increase/decrease windows in the master pane or the stack
         , ("M-S-,", sendMessage (IncMasterN 1))      -- Increase number of clients in master pane

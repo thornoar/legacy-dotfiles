@@ -84,6 +84,7 @@ alias df='df -h'                                                # Human-readable
 alias free='free -m'                                            # Show sizes in MB
 alias gitu='git add . && git commit && git push'
 alias dgit='cd ~/Downloads/git'
+alias tr='transmission-remote'
 
 eval $(thefuck --alias)
 eval "$(dircolors -b)"
