@@ -84,7 +84,7 @@ window:
   decorations: full
   startup_mode: Windowed
   dynamic_title: true
-  # opacity: .9
+  # opacity: .95
 
 font:
   normal:

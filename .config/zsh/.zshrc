@@ -1,3 +1,9 @@
+export EDITOR="nvim"
+export TERMINAL="alacritty"
+export BROWSER="firefox"
+export READER="zathura"
+export DE="generic"
+
 ZSH_THEME="bira"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 plugins=(git)
@@ -86,6 +92,7 @@ alias gitu='git add . && git commit && git push'
 alias dgit='cd ~/Downloads/git'
 alias tr='transmission-remote'
 alias br='xrandr --output HDMI-0 --brightness'
+alias w3mimgdisplay='w3m'
 
 eval $(thefuck --alias)
 eval "$(dircolors -b)"
@@ -94,3 +101,19 @@ eval "$(dircolors -b)"
 # bindkey '^e' edit-command-line
 
 bindkey -v
+
+# Remove delay when entering normal mode (vi)
+KEYTIMEOUT=5
+
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+  if [[ $KEYMAP == vicmd ]] || [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+  elif [[ $KEYMAP == main ]] || [[ $KEYMAP == viins ]] || [[ $KEYMAP = '' ]] || [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+
+# Start with beam shape cursor on zsh startup and after every command.
+zle-line-init() { zle-keymap-select 'beam'}
