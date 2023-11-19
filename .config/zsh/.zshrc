@@ -1,17 +1,24 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 export EDITOR="nvim"
 export TERMINAL="alacritty"
 export BROWSER="firefox"
 export READER="zathura"
 export DE="generic"
 
-ZSH_THEME="bira"
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-plugins=(git)
-
-source $ZSH/oh-my-zsh.sh
-TRAPWINCH() {
-  zle && { zle reset-prompt; zle -R }
-}
+# ZSH_THEME="darkblood"
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+# # plugins=(git)
+#
+# source $ZSH/oh-my-zsh.sh
+# TRAPWINCH() {
+#   zle && { zle reset-prompt; zle -R }
+# }
 
 ## Options section
 setopt correct                                                  # Auto correct mistakes
@@ -72,7 +79,7 @@ fi
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
 
-compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
+# compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
 
 alias cdir='cd ~/.config/nvim'
 alias sbdir='cd ~/projects/sandbox'
@@ -93,6 +100,7 @@ alias dgit='cd ~/Downloads/git'
 alias tr='transmission-remote'
 alias br='xrandr --output HDMI-0 --brightness'
 alias w3mimgdisplay='w3m'
+alias c="ping google.com"
 
 eval $(thefuck --alias)
 eval "$(dircolors -b)"
@@ -117,3 +125,7 @@ zle -N zle-keymap-select
 
 # Start with beam shape cursor on zsh startup and after every command.
 zle-line-init() { zle-keymap-select 'beam'}
+source $ZDOTDIR/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source $ZDOTDIR/.p10k.zsh

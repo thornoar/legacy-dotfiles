@@ -15,3 +15,5 @@ keynav &
 feh --randomize --bg-fill /home/ramak/Wallpapers
 
 transmission-daemon
+
+setxkbmap -layout us,ru,de

@@ -243,7 +243,8 @@ myKeys = [
         , ("M-S-<Up>", sendMessage FirstLayout)           -- Switch to next layout
 		, ("M-S-/", sendMessage (MT.Toggle NBFULL)) -- Toggles noborder
 		-- , ("M-t", sendMessage ToggleStruts)
-	    , ("M-S-p", spawn "feh --randomize --bg-fill /home/ramak/Wallpapers")
+	    , ("M-S-p", spawn "feh --randomize --bg-fill $HOME/Wallpapers")
+	    , ("M-S-b", spawn "feh --bg-fill $XDG_CONFIG_HOME/xmonad/black.jpg")
 
     -- Increase/decrease windows in the master pane or the stack
         , ("M-S-,", sendMessage (IncMasterN 1))      -- Increase number of clients in master pane
@@ -258,9 +259,9 @@ myKeys = [
         , ("M-C-;", sendMessage MirrorExpand)          -- Expand vert window width
 
 	-- Keyboard Layouts
-		, ("M-1", spawn "setxkbmap -layout us")
-		, ("M-2", spawn "setxkbmap -layout ru")
-		, ("M-3", spawn "setxkbmap -layout de")
+		, ("M-1", spawn "xkb-switch -s us")
+		, ("M-2", spawn "xkb-switch -s ru")
+		, ("M-3", spawn "xkb-switch -s de")
 
     -- Multimedia Keys
 		, ("M-S-<Page_Down>", spawn "amixer sset Master 5%-")
@@ -268,6 +269,7 @@ myKeys = [
 		, ("M-S-<Right>", spawn "playerctl next")
 		, ("M-S-<Left>", spawn "playerctl previous")
 		, ("M-<Space>", spawn "playerctl play-pause")
+		, ("M-s", spawn "flameshot gui")
 
     -- Floating windows
         , ("M-C-<Page_Up>", sendMessage (T.Toggle "simplestFloat")) -- Toggles my 'floats' layout
