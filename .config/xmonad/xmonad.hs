@@ -89,7 +89,7 @@ myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y 
 
 myFont :: String
 -- myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
-myFont = "xft:Hack Mono:regular:size=11:bold=true:antialias=true:hinting=true"
+myFont = "xft:Hack Mono:mono:size=12:bold=false:antialias=true:hinting=true"
 
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
@@ -187,7 +187,7 @@ myXPConfig = def
       }
 
 myPrograms :: [String]
-myPrograms = [ myTerminal++" -e btop", "telegram-desktop", "discord", "obs" ]
+myPrograms = [ myTerminal++" -e btop", "telegram-desktop", "discord", "obs", "goldendict" ]
 
 myKeys :: [(String, X ())]
 myKeys = [
@@ -198,8 +198,8 @@ myKeys = [
         , ("M-<Return>", shellPrompt myXPConfig) -- Xmonad Shell Prompt
 
     -- Other Prompts
-        , ("M-v m", manPrompt myXPConfig)          -- manPrompt
-        , ("M-v x", xmonadPrompt myXPConfig)       -- xmonadPrompt
+        , ("M-<Tab> m", manPrompt myXPConfig)          -- manPrompt
+        , ("M-<Tab> x", xmonadPrompt myXPConfig)       -- xmonadPrompt
 
     -- Kill windows
         , ("M-c", kill)     -- Kill the currently focused client
@@ -207,7 +207,8 @@ myKeys = [
 
 	-- Quick Programs
 		, ("M-e", spawn ( myTerminal ++ " -e ranger" ))
-		, ("M-x", spawn ( myTerminal ++ " -e nvim" ))
+		, ("M-x", spawn ( myTerminal ++ " -e zsh -c 'cd $PROJECTS && nvim'" ))
+		, ("M-v", spawn ( myTerminal ++ " -e mocp" ))
 		, ("M-w", spawn myBrowser)
 		, ("M-a", spawn myTerminal)
 	
@@ -239,16 +240,19 @@ myKeys = [
 		, ("M-b", withLastMinimized maximizeWindow)
 
     -- Layouts
-        , ("M-S-<Down>", sendMessage NextLayout)           -- Switch to next layout
-        , ("M-S-<Up>", sendMessage FirstLayout)           -- Switch to next layout
-		, ("M-S-/", sendMessage (MT.Toggle NBFULL)) -- Toggles noborder
+        , ("M-C-<Down>", sendMessage NextLayout)           -- Switch to next layout
+        , ("M-C-<Up>", sendMessage FirstLayout)           -- Switch to next layout
+		, ("M-C-/", sendMessage (MT.Toggle NBFULL)) -- Toggles noborder
 		-- , ("M-t", sendMessage ToggleStruts)
-	    , ("M-S-p", spawn "feh --randomize --bg-fill $HOME/Wallpapers")
-	    , ("M-S-b", spawn "feh --bg-fill $XDG_CONFIG_HOME/xmonad/black.jpg")
+	    , ("M-C-p", spawn "feh --randomize --bg-fill $HOME/wallpapers/Japan")
+	    , ("M-C-b", spawn "feh --bg-fill $XDG_CONFIG_HOME/xmonad/black.jpg")
+        , ("M-C-<Page_Up>", sendMessage (T.Toggle "simplestFloat")) -- Toggles my 'floats' layout
+        , ("M-C-<Page_Down>", withFocused $ windows . W.sink)  -- Push floating window back to tile
+        , ("M-C-t", sinkAll)                       -- Push ALL floating windows to tile
 
     -- Increase/decrease windows in the master pane or the stack
-        , ("M-S-,", sendMessage (IncMasterN 1))      -- Increase number of clients in master pane
-        , ("M-S-.", sendMessage (IncMasterN (-1))) -- Decrease number of clients in master pane
+        -- , ("M-S-,", sendMessage (IncMasterN 1))      -- Increase number of clients in master pane
+        -- , ("M-S-.", sendMessage (IncMasterN (-1))) -- Decrease number of clients in master pane
         -- , ("M-C-<Up>", increaseLimit)                   -- Increase number of windows
         -- , ("M-C-<Down>", decreaseLimit)                 -- Decrease number of windows
 
@@ -259,22 +263,26 @@ myKeys = [
         , ("M-C-;", sendMessage MirrorExpand)          -- Expand vert window width
 
 	-- Keyboard Layouts
-		, ("M-1", spawn "xkb-switch -s us")
-		, ("M-2", spawn "xkb-switch -s ru")
-		, ("M-3", spawn "xkb-switch -s de")
+		, ("M-1", spawn "chlang us")
+		, ("M-2", spawn "chlang ru")
+		, ("M-3", spawn "chlang de")
 
     -- Multimedia Keys
 		, ("M-S-<Page_Down>", spawn "amixer sset Master 5%-")
 		, ("M-S-<Page_Up>", spawn "amixer sset Master 5%+")
-		, ("M-S-<Right>", spawn "playerctl next")
-		, ("M-S-<Left>", spawn "playerctl previous")
-		, ("M-<Space>", spawn "playerctl play-pause")
-		, ("M-s", spawn "flameshot gui")
-
-    -- Floating windows
-        , ("M-C-<Page_Up>", sendMessage (T.Toggle "simplestFloat")) -- Toggles my 'floats' layout
-        , ("M-C-<Page_Down>", withFocused $ windows . W.sink)  -- Push floating window back to tile
-        , ("M-S-t", sinkAll)                       -- Push ALL floating windows to tile
+        , ("M-S-,", spawn "inc_bright -500")
+        , ("M-S-.", spawn "inc_bright 500")
+		, ("M-S-<Home>", spawn "mocp --seek -500")
+		, ("M-S-<Down>", spawn "mocp --next") 
+		, ("M-S-<Up>", spawn "mocp --previous")
+		, ("M-S-<Right>", spawn "mocp --seek +5")
+		, ("M-S-<Left>", spawn "mocp --seek -5")
+		, ("M-<Space>", spawn "mocp --toggle-pause")
+        , ("M-z <Space>", spawn "playerctl play-pause")
+        , ("M-z <Right>", spawn "playerctl next")
+        , ("M-z <Left>", spawn "playerctl previous")
+		, ("M-s", spawn "flameshot gui --path $HOME/Pictures")
+        , ("M-S-s", spawn "flameshot full --path $HOME/Pictures")
         ]
     -- Appending search engine prompts to keybindings list.
     -- Look at "search engines" section of this config for values for "k".
@@ -295,8 +303,8 @@ mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 -- mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
 mySpace, mySpace' :: Integer
-mySpace = 5
-mySpace' = 4
+mySpace = 0
+mySpace' = 0
 
 myLayout = tall ||| Full ||| magnified ||| tabs
 

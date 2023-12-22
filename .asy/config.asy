@@ -1,2 +1,3 @@
 import settings;
-dir = "/home/ramak/projects/libs:/home/ramak/projects/libs/smoothmanifold";
+dir = "/home/ramak/projects:/home/ramak/projects/smoothmanifold";
+outformat = "pdf";

@@ -1,5 +1,5 @@
 export PROJECTS=$HOME/projects
-export PATH=$PROJECTS/scripts:$PROJECTS:$PATH:$PROJECTS/programming/.venv/bin
+export PATH=$PROJECTS/scripts:$PROJECTS/.config:$PATH:$PROJECTS/programming/.venv/bin
 export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 export ZDOTDIR="$HOME/.config/zsh"
 export XDG_DATA_HOME=$HOME/.local/share
@@ -10,7 +10,9 @@ export DE="generic"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
 export ZSH="$XDG_DATA_HOME"/oh-my-zsh
 export HISTFILE=$XDG_CONFIG_HOME/zsh/.zhistory
-export TEXINPUTS=.:$PROJECTS:$TEXINPUTS
+export TEXINPUTS=.:$PROJECTS/libs:$TEXINPUTS
+export LAPTOP=false
+export PYTHONPATH=/usr/share/asymptote:$PYTHONPATH
 
 # File and Dir colors for ls and other outputs
 export LS_OPTIONS='--color=auto'

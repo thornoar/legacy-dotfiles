@@ -98,34 +98,39 @@ alias free='free -m'                                            # Show sizes in 
 alias gitu='git add . && git commit && git push'
 alias dgit='cd ~/Downloads/git'
 alias tr='transmission-remote'
-alias br='xrandr --output HDMI-0 --brightness'
+alias film='transmission-remote -w ~/media/Films -a '
+alias music='transmission-remote -w ~/media/Music -a '
 alias w3mimgdisplay='w3m'
 alias c="ping google.com"
+alias ll="ls -la"
 
 eval $(thefuck --alias)
 eval "$(dircolors -b)"
 
-# autoload edit-command-line; zle edit-command-line
-# bindkey '^e' edit-command-line
-
+# Activate vim mode.
 bindkey -v
 
-# Remove delay when entering normal mode (vi)
+# Remove mode switching delay.
 KEYTIMEOUT=5
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
-  if [[ $KEYMAP == vicmd ]] || [[ $1 = 'block' ]]; then
+  if [[ ${KEYMAP} == vicmd ]] ||
+     [[ $1 = 'block' ]]; then
     echo -ne '\e[1 q'
-  elif [[ $KEYMAP == main ]] || [[ $KEYMAP == viins ]] || [[ $KEYMAP = '' ]] || [[ $1 = 'beam' ]]; then
+
+  elif [[ ${KEYMAP} == main ]] ||
+       [[ ${KEYMAP} == viins ]] ||
+       [[ ${KEYMAP} = '' ]] ||
+       [[ $1 = 'beam' ]]; then
     echo -ne '\e[5 q'
   fi
 }
 zle -N zle-keymap-select
 
-# Start with beam shape cursor on zsh startup and after every command.
-zle-line-init() { zle-keymap-select 'beam'}
 source $ZDOTDIR/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source $ZDOTDIR/.p10k.zsh
+
+# bright 3000
