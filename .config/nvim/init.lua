@@ -106,16 +106,10 @@ require('lazy').setup({
 		build = ':TSUpdate',
 	},
 
-    'thornoar/nvim-subfiles',
+   -- 'thornoar/nvim-subfiles',
 }, {})
 
 -- // SETUP // --
-
--- package.path = package.path .. ';'..home..'/programming/nvim-subfiles/?.lua'
-require('nvim-subfiles').setup({
-    ['subfile'] = 'SF',
-    ['subfigure'] = 'CF',
-})
 
 require('gitsigns').setup()
 
@@ -126,3 +120,10 @@ require('telescope_setup')
 require('rest_setup')
 
 require('settings')
+
+package.path = package.path .. ';'..home..'/programming/nvim-subfiles/lua/?.lua'
+require('nvim-subfiles').setup({
+  ['subfile'] = 'SF',
+  ['subfigure'] = 'CF',
+})
+require('nvim-subfiles').setup({})

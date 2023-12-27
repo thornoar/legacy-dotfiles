@@ -66,7 +66,7 @@ myBrowser :: String
 myBrowser = "firefox"
 
 myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
+myFocusFollowsMouse = False
 
 myClickJustFocuses :: Bool
 myClickJustFocuses = False

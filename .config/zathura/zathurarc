@@ -50,6 +50,7 @@ set render-loading-bg           "#f8f8f2" # Foreground
 #
 
 set recolor-lightcolor          "#1e2127" # Background
+# set recolor-lightcolor          "#14161a" # Background
 set recolor-darkcolor           "#f8f8f2" # Foreground
 
 #

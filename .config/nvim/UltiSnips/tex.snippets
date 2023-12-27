@@ -184,7 +184,11 @@ snippet iff "iff" Ai
 endsnippet
 
 snippet mk "Math" wA
-$ ${1:${VISUAL}} $ $0
+$ ${0:${VISUAL}} $
+endsnippet
+
+snippet ref "ref"
+\\ref{$0}
 endsnippet
 
 snippet dm "Display Math" wA
@@ -197,10 +201,16 @@ ${1:${VISUAL}}
 \\]
 endsnippet
 
-snippet ali "Align" bA
+snippet al "Align" b
 \\begin{align*}
-	${1:${VISUAL}}
+${1:${VISUAL}}
 \\end{align*}
+endsnippet
+
+snippet eq "equation" b
+\\begin{equation}
+${1:${VISUAL}}
+\\end{equation}
 endsnippet
 
 context "math()"
@@ -256,7 +266,7 @@ snip.rv = eval('latex(' + match.group(1).replace('\\', '').replace('^', '**').re
 endsnippet
 
 snippet == "equals" iA
-&= $1 \\\\
+&= $1
 endsnippet
 
 snippet != "not equals" iA
@@ -342,11 +352,11 @@ endsnippet
 
 context "math()"
 snippet ^^ "to the ... power" iA
-^{$1}
+^{$0}
 endsnippet
 
 snippet __ "subscript" iA
-_{$1}
+_{$0}
 endsnippet
 
 context "math()"
@@ -609,31 +619,31 @@ snippet cvec "column vector" iA
 endsnippet
 
 context "math()"
-snippet dd "\dot" iA
+snippet dd "\dot" i
 \\dot{$0}
 endsnippet
 
 priority 10
 context "math()"
-snippet "bar" "bar" riA
+snippet "bar" "bar" ri
 \\overline{$0}
 endsnippet
 
 priority 100
 context "math()"
-snippet "([a-zA-Z])bar" "bar" riA
+snippet "([a-zA-Z])bar" "bar" ri
 \\overline{`!p snip.rv=match.group(1)`}
 endsnippet
 
 priority 10
 context "math()"
-snippet "hat" "hat" riA
+snippet "hat" "hat" ri
 \\hat{$0}
 endsnippet
 
 priority 100
 context "math()"
-snippet "([a-zA-Z])hat" "hat" riA
+snippet "([a-zA-Z])hat" "hat" ri
 \\hat{`!p snip.rv=match.group(1)`} 
 endsnippet
 
@@ -650,7 +660,7 @@ snippet "([a-zA-Z])wt" "WideTilde" ri
 endsnippet
 
 context "math()"
-snippet phi "Phi" iA
+snippet phi "Phi" i
 \\varphi
 endsnippet
 
