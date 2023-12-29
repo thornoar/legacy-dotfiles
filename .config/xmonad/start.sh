@@ -15,7 +15,7 @@ setxkbmap -option "caps:none"
 unclutter -idle 0.5 &
 keynav &
 
-feh --randomize --bg-fill /home/ramak/wallpapers/Japan
+feh --bg-fill $XDG_CONFIG_HOME/xmonad/smoothmanifold.png
 
 transmission-daemon
 

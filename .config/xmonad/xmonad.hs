@@ -246,6 +246,7 @@ myKeys = [
 		-- , ("M-t", sendMessage ToggleStruts)
 	    , ("M-C-p", spawn "feh --randomize --bg-fill $HOME/wallpapers/Japan")
 	    , ("M-C-b", spawn "feh --bg-fill $XDG_CONFIG_HOME/xmonad/black.jpg")
+	    , ("M-C-n", spawn "feh --bg-fill $XDG_CONFIG_HOME/xmonad/smoothmanifold.png")
         , ("M-C-<Page_Up>", sendMessage (T.Toggle "simplestFloat")) -- Toggles my 'floats' layout
         , ("M-C-<Page_Down>", withFocused $ windows . W.sink)  -- Push floating window back to tile
         , ("M-C-t", sinkAll)                       -- Push ALL floating windows to tile
