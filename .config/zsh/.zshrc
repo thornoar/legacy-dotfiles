@@ -103,6 +103,7 @@ alias music='transmission-remote -w ~/media/Music -a '
 alias w3mimgdisplay='w3m'
 alias c="ping google.com"
 alias ll="ls -la"
+alias open="xdg-open"
 
 eval $(thefuck --alias)
 eval "$(dircolors -b)"

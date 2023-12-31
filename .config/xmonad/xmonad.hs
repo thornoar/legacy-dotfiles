@@ -247,6 +247,7 @@ myKeys = [
 	    , ("M-C-p", spawn "feh --randomize --bg-fill $HOME/wallpapers/Japan")
 	    , ("M-C-b", spawn "feh --bg-fill $XDG_CONFIG_HOME/xmonad/black.jpg")
 	    , ("M-C-n", spawn "feh --bg-fill $XDG_CONFIG_HOME/xmonad/smoothmanifold.png")
+        , ("M-C-l", spawn "sleep 1 && xset dpms force off")
         , ("M-C-<Page_Up>", sendMessage (T.Toggle "simplestFloat")) -- Toggles my 'floats' layout
         , ("M-C-<Page_Down>", withFocused $ windows . W.sink)  -- Push floating window back to tile
         , ("M-C-t", sinkAll)                       -- Push ALL floating windows to tile
@@ -304,8 +305,10 @@ mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 -- mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
 mySpace, mySpace' :: Integer
-mySpace = 0
-mySpace' = 0
+-- mySpace = 0
+-- mySpace' = 0
+mySpace = 5
+mySpace' = 4
 
 myLayout = tall ||| Full ||| magnified ||| tabs
 
