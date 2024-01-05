@@ -283,8 +283,8 @@ myKeys = [
         , ("M-z <Space>", spawn "playerctl play-pause")
         , ("M-z <Right>", spawn "playerctl next")
         , ("M-z <Left>", spawn "playerctl previous")
-		, ("M-s", spawn "flameshot gui --path $HOME/Pictures")
-        , ("M-S-s", spawn "flameshot full --path $HOME/Pictures")
+		, ("M-s", spawn "flameshot gui --path $HOME/media/Pictures")
+        , ("M-S-s", spawn "flameshot full --path $HOME/media/Pictures")
         ]
     -- Appending search engine prompts to keybindings list.
     -- Look at "search engines" section of this config for values for "k".
@@ -305,12 +305,12 @@ mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 -- mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
 mySpace, mySpace' :: Integer
--- mySpace = 0
--- mySpace' = 0
-mySpace = 5
-mySpace' = 4
+mySpace = 0
+mySpace' = 0
+-- mySpace = 5
+-- mySpace' = 4
 
-myLayout = tall ||| Full ||| magnified ||| tabs
+myLayout = tall ||| Full ||| tabs ||| magnified
 
 tall = windowNavigation
            $ limitWindows 5

@@ -63,5 +63,7 @@ set guioptions none
 map <S-Up> feedkeys "zI"
 map <S-Down> feedkeys "zO"
 
+set zoom-max 50000
+
 set synctex true
 set synctex-editor-command "nvr --remote-silent +%{line} %{input}"
