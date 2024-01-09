@@ -104,6 +104,7 @@ alias w3mimgdisplay='w3m'
 alias c="ping google.com"
 alias ll="ls -la"
 alias open="xdg-open"
+alias zc="zle-keymap-select"
 
 eval $(thefuck --alias)
 eval "$(dircolors -b)"
@@ -128,6 +129,7 @@ function zle-keymap-select {
   fi
 }
 zle -N zle-keymap-select
+zle-keymap-select
 
 source $ZDOTDIR/powerlevel10k/powerlevel10k.zsh-theme
 

@@ -301,30 +301,30 @@ mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 
 -- Below is a variation of the above except no borders are applied
 -- if fewer than two windows. So a single window has no gaps.
--- mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
--- mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
+mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
 mySpace, mySpace' :: Integer
-mySpace = 0
-mySpace' = 0
--- mySpace = 5
--- mySpace' = 4
+-- mySpace = 0
+-- mySpace' = 0
+mySpace = 5
+mySpace' = 4
 
-myLayout = tall ||| Full ||| tabs ||| magnified
+myLayout = tall ||| Full ||| tabs ||| magnified ||| spirals
 
 tall = windowNavigation
            $ limitWindows 5
-           $ mySpacing mySpace
+           $ mySpacing' mySpace
            $ ResizableTall 1 (3/100) (1/2) []
 magnified = windowNavigation
            $ magnifier
-		   $ mySpacing mySpace
+		   $ mySpacing' mySpace
            $ limitWindows 12
            $ ResizableTall 1 (3/100) (1/2) []
 grid = windowNavigation
            $ subLayout [] (smartBorders Simplest)
            $ limitWindows 12
-           $ mySpacing mySpace
+           $ mySpacing' mySpace
            $ mkToggle (single MIRROR)
            $ Grid (16/10)
 spirals = mySpacing mySpace
@@ -333,7 +333,7 @@ spirals = mySpacing mySpace
 threeCol = windowNavigation
            $ limitWindows 7
            $ ThreeCol 1 (3/100) (1/2)
-tabs = windowNavigation $ mySpacing mySpace' $ tabbed shrinkText myTabTheme
+tabs = windowNavigation $ mySpacing' mySpace' $ tabbed shrinkText myTabTheme
 
 ------------------------------------------------------------------------
 -- Window rules:

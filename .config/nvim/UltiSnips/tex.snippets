@@ -313,20 +313,20 @@ snippet lr} "left\{ right\}" i
 endsnippet
 
 snippet lr] "left[ right]" i
-\\left[ ${1:${VISUAL}} \\right] $0
+\\left[ ${1:${VISUAL}} \\right]
 endsnippet
 
 snippet lr> "leftangle rightangle" i
-\\left< ${1:${VISUAL}} \\right>$0
+\\left< ${1:${VISUAL}} \\right>
 endsnippet
 
 context "math()"
 snippet cnj "conjugate" i
-\\overline{${1:${VISUAL}}}$0
+\\overline{${0:${VISUAL}}}
 endsnippet
 
 snippet sum "sum" w
-\\sum\\limits_{k=${1:1}}^{${2:\infty}} $3
+\\sum\\limits_{k=${1:1}}^{${2:\infty}}
 endsnippet
 
 snippet lim "limit" w
@@ -338,16 +338,16 @@ snippet limsup "limsup" w
 endsnippet
 
 snippet prod "product" w
-\\prod\\limits_{${1:n=${2:1}}}^{${3:\infty}} ${4:${VISUAL}} $0
+\\prod\\limits_{${1:n=${2:1}}}^{${3:\infty}} ${4:${VISUAL}}
 endsnippet
 
 snippet part "d/dx" w
-\\frac{\\partial $1}}{\\partial ${2:x}} $0
+\\frac{\\partial $1}}{\\partial ${2:x}}
 endsnippet
 
 context "math()"
 snippet sq "\sqrt{}" i
-\\sqrt{${1:${VISUAL}}} $0
+\\sqrt{${0:${VISUAL}}}
 endsnippet
 
 context "math()"

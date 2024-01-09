@@ -25,4 +25,4 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;36m'
 export LESS=-R
 
-exec startx > /dev/null 2>&1
+#exec startx > /dev/null 2>&1
