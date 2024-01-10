@@ -117,7 +117,7 @@ require('commands')
 require('keymaps')
 
 require('telescope_setup')
-require('rest_setup')
+require('remainder')
 
 require('settings')
 
